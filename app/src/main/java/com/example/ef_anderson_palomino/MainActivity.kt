@@ -33,7 +33,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnConsultar.setOnClickListener {
             val id = binding.editTextId.text.toString().toIntOrNull()
             if (id == null) {
-                binding.textResultado.text = "⚠️ Ingrese un ID numérico válido."
+                binding.textId.text = ""
+                binding.textTituloProducto.text = ""
+                binding.textPrecio.text = ""
+                binding.textDescripcion.text = "⚠️ Ingrese un ID numérico válido."
                 return@setOnClickListener
             }
             consultarProducto(id)
@@ -47,33 +50,26 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Producto>, response: Response<Producto>) {
                 if (response.isSuccessful && response.body() != null) {
                     val p = response.body()!!
-                    val ratingTexto = if (p.rating != null) {
-                        "Rating: ${p.rating.rate} (${p.rating.count} votos)"
-                    } else {
-                        "Rating: No disponible"
-                    }
-
-                    binding.textResultado.text = """
-        ID: ${p.id}
-        Título: ${p.title}
-        Precio: $${p.price}
-        Categoría: ${p.category}
-        $ratingTexto
-        Descripción: ${p.description}
-    """.trimIndent()
+                    binding.textId.text = p.id.toString()
+                    binding.textTituloProducto.text = p.title
+                    binding.textPrecio.text = "$${p.price}"
+                    binding.textDescripcion.text = p.description
+                    binding.textCategoria.text = p.category
+                    binding.textRating.text = p.rating.rate.toString()
+                    binding.textCount.text = p.rating.count.toString()
 
                     Glide.with(this@MainActivity)
                         .load(p.image)
                         .into(binding.imageProducto)
-                } else {
-                    binding.textResultado.text =
-                        "Producto no encontrado o error: ${response.code()}"
-                }
 
+                    binding.textAlumno.text = "Alumno: Anderson Palomino"
+                } else {
+                    binding.textDescripcion.text = "❌ Producto no encontrado o error: ${response.code()}"
+                }
             }
 
             override fun onFailure(call: Call<Producto>, t: Throwable) {
-                binding.textResultado.text = "Error al consultar: ${t.message}"
+                binding.textDescripcion.text = "❌ Error al consultar: ${t.message}"
             }
         })
     }
