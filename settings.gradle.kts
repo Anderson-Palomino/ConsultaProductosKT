@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "EF_Anderson_Palomino"
+rootProject.name = "EF_CONSULTA_PRODUCTOS"
 include(":app")
